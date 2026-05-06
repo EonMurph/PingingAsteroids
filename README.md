@@ -1,3 +1,3 @@
-# Pong (but Zig)
+# PingingAsteroids
 
-A basic mini game of Pong built to test Zig's game dev potential.
+A remake of Pong built to test Zig's game dev potential.

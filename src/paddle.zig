@@ -1,5 +1,5 @@
 const rl = @import("raylib");
-const Window = @import("window.zig").Window;
+const window = @import("window.zig").window;
 
 pub const Paddle = struct {
     pos: rl.Vector2,
@@ -7,7 +7,7 @@ pub const Paddle = struct {
     width: u8,
     height: u8,
 
-    pub fn init(x: u32) Paddle {
+    pub fn init(x: f32) Paddle {
         return Paddle{
             .pos = rl.Vector2.init(x, 10),
             .vel_y = 8,
@@ -17,14 +17,14 @@ pub const Paddle = struct {
     }
 
     pub fn up(self: *Paddle) void {
-        self.pos.y -|= self.vel_y;
+        self.pos.y = @max(self.pos.y - self.vel_y, 0);
     }
 
-    pub fn down(self: *Paddle, window: Window) void {
+    pub fn down(self: *Paddle) void {
         self.pos.y = @min(self.pos.y + self.vel_y, window.height - self.height);
     }
 
-    pub fn draw(self: Paddle) void {
-        rl.drawRectangle(@intCast(self.pos.x), @intCast(self.pos.y), self.width, self.height, .white);
+    pub fn draw(self: *const Paddle) void {
+        rl.drawRectangle(@intFromFloat(self.pos.x), @intFromFloat(self.pos.y), self.width, self.height, .white);
     }
 };

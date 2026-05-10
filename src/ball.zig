@@ -17,6 +17,7 @@ pub const Ball = struct {
     bounding_r: f32,
     pos: Vec2,
     vel: Vec2,
+    rot: f32,
     prng: Random.DefaultPrng,
     points: []Vec2,
     max_dist: f32,
@@ -37,6 +38,7 @@ pub const Ball = struct {
             .bounding_r = size_scalar * max_dist,
             .pos = Vec2.init(window.width / 2, window.height / 2),
             .vel = Vec2.init(x_dir * x_vel, y_dir * y_vel),
+            .rot = x_dir * @mod(prng.random().float(f32), 0.01),
             .prng = prng,
             .points = points,
             .max_dist = max_dist,
@@ -93,6 +95,7 @@ pub const Ball = struct {
         var curPoint: Vec2 = undefined;
         var nextPoint: Vec2 = undefined;
         for (0..self.points.len) |i| {
+            self.points[i] = vecRotate(self.points[i], self.rot);
             curPoint = vecAdd(self.points[i], pos);
             nextPoint = vecAdd(self.points[(i + 1) % self.points.len], pos);
             rl.drawLineEx(curPoint, nextPoint, 3, rl.Color.red.brightness(@as(f32, @floatFromInt(i)) / @as(f32, @floatFromInt(self.points.len))));

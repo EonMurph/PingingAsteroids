@@ -1,4 +1,5 @@
 const rl = @import("raylib");
+
 const window = @import("window.zig").window;
 
 pub const Paddle = struct {

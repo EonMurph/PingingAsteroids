@@ -1,8 +1,10 @@
 const std = @import("std");
+
 const rl = @import("raylib");
-const window = @import("window.zig").window;
-const Paddle = @import("paddle.zig").Paddle;
+
 const Ball = @import("ball.zig").Ball;
+const Paddle = @import("paddle.zig").Paddle;
+const window = @import("window.zig").window;
 
 const State = struct {
     p1: *Paddle,

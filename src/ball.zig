@@ -73,7 +73,7 @@ pub const Ball = struct {
         var max_dist: f32 = 0;
         for (0..n_points) |i| {
             var dist = prng.random().float(f32);
-            if (prng.random().float(f32) > 0.3) {
+            if (prng.random().float(f32) > 0.2) {
                 dist = (((1 - min_dist) * (dist - 0)) / (1 - 0)) + min_dist;
             }
             max_dist = if (dist > max_dist) dist else max_dist;

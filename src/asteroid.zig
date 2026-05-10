@@ -13,7 +13,7 @@ const vecAdd = utils.vecAdd;
 const vecRotate = utils.vecRotate;
 const window = @import("window.zig").window;
 
-pub const Ball = struct {
+pub const Asteroid = struct {
     bounding_r: f32,
     pos: Vec2,
     vel: Vec2,
@@ -23,7 +23,7 @@ pub const Ball = struct {
     max_dist: f32,
     allocator: *const std.mem.Allocator,
 
-    pub fn init(io: Io, allocator: *const std.mem.Allocator) Ball {
+    pub fn init(io: Io, allocator: *const std.mem.Allocator) Asteroid {
         const size_scalar = 70;
 
         var prng = Random.DefaultPrng.init(@intCast(Io.Clock.real.now(io).toMicroseconds()));
@@ -34,7 +34,7 @@ pub const Ball = struct {
         const y_dir: i8 = if (prng.random().float(f32) > 0.5) -1 else 1;
         const y_vel = prng.random().float(f32) * 5;
 
-        return Ball{
+        return Asteroid{
             .bounding_r = size_scalar * max_dist,
             .pos = Vec2.init(window.width / 2, window.height / 2),
             .vel = Vec2.init(x_dir * x_vel, y_dir * y_vel),
@@ -46,7 +46,7 @@ pub const Ball = struct {
         };
     }
 
-    pub fn move(self: *Ball) void {
+    pub fn move(self: *Asteroid) void {
         self.pos.y += self.vel.y;
         self.pos.x += self.vel.x;
 
@@ -91,7 +91,7 @@ pub const Ball = struct {
         return .{ points, max_dist };
     }
 
-    fn drawInstance(self: *const Ball, pos: Vec2) !void {
+    fn drawInstance(self: *const Asteroid, pos: Vec2) !void {
         var curPoint: Vec2 = undefined;
         var nextPoint: Vec2 = undefined;
         for (0..self.points.len) |i| {
@@ -103,13 +103,11 @@ pub const Ball = struct {
         }
     }
 
-    pub fn draw(self: *const Ball) void {
+    pub fn draw(self: *const Asteroid) void {
         const dir: f32 = switch (math.signbit(self.vel.y)) {
             true => 1,
             false => -1,
         };
-        // rl.drawCircle(@intFromFloat(self.pos.x), @intFromFloat(self.pos.y + (dir * window.height)), self.r, .white);
-        // rl.drawCircle(@intFromFloat(self.pos.x), @intFromFloat(self.pos.y), self.r, .white);
         self.drawInstance(self.pos) catch unreachable;
         self.drawInstance(.{
             .x = self.pos.x,
@@ -117,7 +115,7 @@ pub const Ball = struct {
         }) catch unreachable;
     }
 
-    pub fn destroy(self: *const Ball) void {
+    pub fn destroy(self: *const Asteroid) void {
         self.allocator.free(self.points);
     }
 };

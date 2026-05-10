@@ -2,14 +2,14 @@ const std = @import("std");
 
 const rl = @import("raylib");
 
-const Ball = @import("ball.zig").Ball;
-const Paddle = @import("paddle.zig").Paddle;
+const Asteroid = @import("asteroid.zig").Asteroid;
+const Ship = @import("ship.zig").Ship;
 const window = @import("window.zig").window;
 
 const State = struct {
-    p1: *Paddle,
-    p2: *Paddle,
-    ball: *Ball,
+    p1: *Ship,
+    p2: *Ship,
+    asteroid: *Asteroid,
     allocator: *const std.mem.Allocator,
 };
 
@@ -20,19 +20,19 @@ fn update(state: *State, io: std.Io) void {
         state.p1.down();
     } else if (rl.isKeyPressed(.space)) {
         // for testing asteroid shapes
-        state.allocator.destroy(state.ball);
-        state.ball.destroy();
-        const ball: *Ball = state.allocator.create(Ball) catch unreachable;
-        ball.* = Ball.init(io, state.allocator);
-        state.ball = ball;
+        state.allocator.destroy(state.asteroid);
+        state.asteroid.destroy();
+        const ball: *Asteroid = state.allocator.create(Asteroid) catch unreachable;
+        ball.* = Asteroid.init(io, state.allocator);
+        state.asteroid = ball;
     }
-    state.ball.*.move();
+    state.asteroid.*.move();
 }
 
 fn render(state: *const State) void {
     state.p1.draw();
     state.p2.draw();
-    state.ball.draw();
+    state.asteroid.draw();
 }
 
 pub fn main(init: std.process.Init) void {
@@ -41,16 +41,16 @@ pub fn main(init: std.process.Init) void {
     const allocator = dba.allocator();
 
     const inset = 10;
-    var p1 = Paddle.init(inset);
+    var p1 = Ship.init(inset);
     const p2_inset = inset + p1.width;
-    var p2 = Paddle.init(window.width - p2_inset);
-    const ball: *Ball = allocator.create(Ball) catch unreachable;
-    ball.* = Ball.init(init.io, &allocator);
+    var p2 = Ship.init(window.width - p2_inset);
+    const ball: *Asteroid = allocator.create(Asteroid) catch unreachable;
+    ball.* = Asteroid.init(init.io, &allocator);
 
     var state = State{
         .p1 = &p1,
         .p2 = &p2,
-        .ball = ball,
+        .asteroid = ball,
         .allocator = &allocator,
     };
 

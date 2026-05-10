@@ -28,10 +28,15 @@ pub const Ball = struct {
         var prng = Random.DefaultPrng.init(@intCast(Io.Clock.real.now(io).toMicroseconds()));
         const points, const max_dist = getPoints(allocator, &prng, size_scalar);
 
+        const x_dir: i8 = if (prng.random().float(f32) > 0.5) -1 else 1;
+        const x_vel = prng.random().float(f32) * 5;
+        const y_dir: i8 = if (prng.random().float(f32) > 0.5) -1 else 1;
+        const y_vel = prng.random().float(f32) * 5;
+
         return Ball{
             .bounding_r = size_scalar * max_dist,
             .pos = Vec2.init(window.width / 2, window.height / 2),
-            .vel = Vec2.init(0, 10),
+            .vel = Vec2.init(x_dir * x_vel, y_dir * y_vel),
             .prng = prng,
             .points = points,
             .max_dist = max_dist,

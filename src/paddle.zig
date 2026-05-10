@@ -9,11 +9,13 @@ pub const Paddle = struct {
     height: u8,
 
     pub fn init(x: f32) Paddle {
+        const height = 100;
+
         return Paddle{
-            .pos = rl.Vector2.init(x, 10),
+            .pos = rl.Vector2.init(x, (window.height / 2) - (height / 2)),
             .vel_y = 8,
             .width = 15,
-            .height = 100,
+            .height = height,
         };
     }
 

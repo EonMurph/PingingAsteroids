@@ -23,7 +23,7 @@ pub const Ball = struct {
     allocator: *const std.mem.Allocator,
 
     pub fn init(io: Io, allocator: *const std.mem.Allocator) Ball {
-        const size_scalar = 100;
+        const size_scalar = 70;
 
         var prng = Random.DefaultPrng.init(@intCast(Io.Clock.real.now(io).toMicroseconds()));
         const points, const max_dist = getPoints(allocator, &prng, size_scalar);

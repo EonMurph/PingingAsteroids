@@ -18,7 +18,11 @@ fn update(state: *State, io: std.Io) void {
         state.p1.up();
     } else if (rl.isKeyDown(.s)) {
         state.p1.down();
-    } else if (rl.isKeyPressed(.space)) {
+    }
+    if (rl.isKeyPressed(.space)) {
+        state.p1.shoot();
+    }
+    if (rl.isKeyPressed(.n)) {
         // for testing asteroid shapes
         state.allocator.destroy(state.asteroid);
         state.asteroid.destroy();
@@ -27,6 +31,7 @@ fn update(state: *State, io: std.Io) void {
         state.asteroid = ball;
     }
     state.asteroid.*.move();
+    state.p1.updateProjectiles();
 }
 
 fn render(state: *const State) void {
@@ -41,9 +46,9 @@ pub fn main(init: std.process.Init) void {
     const allocator = dba.allocator();
 
     const inset = 10;
-    var p1 = Ship.init(inset);
+    var p1 = Ship.init(inset, allocator);
     const p2_inset = inset + p1.width;
-    var p2 = Ship.init(window.width - p2_inset);
+    var p2 = Ship.init(window.width - p2_inset, allocator);
     const ball: *Asteroid = allocator.create(Asteroid) catch unreachable;
     ball.* = Asteroid.init(init.io, &allocator);
 

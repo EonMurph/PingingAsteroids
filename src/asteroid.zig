@@ -49,7 +49,9 @@ pub const Asteroid = struct {
     pub fn move(self: *Asteroid) void {
         self.pos.y += self.vel.y;
         self.pos.x += self.vel.x;
-
+        for (0..self.points.len) |i| {
+            self.points[i] = vecRotate(self.points[i], self.rot);
+        }
         if (self.pos.y - self.bounding_r > window.height) {
             self.pos.y = self.pos.y - window.height;
         } else if (self.pos.y + self.bounding_r < 0) {
@@ -95,7 +97,6 @@ pub const Asteroid = struct {
         var curPoint: Vec2 = undefined;
         var nextPoint: Vec2 = undefined;
         for (0..self.points.len) |i| {
-            self.points[i] = vecRotate(self.points[i], self.rot);
             curPoint = vecAdd(self.points[i], pos);
             nextPoint = vecAdd(self.points[(i + 1) % self.points.len], pos);
             rl.drawLineEx(curPoint, nextPoint, 3, rl.Color.red.brightness(@as(f32, @floatFromInt(i)) / @as(f32, @floatFromInt(self.points.len))));
